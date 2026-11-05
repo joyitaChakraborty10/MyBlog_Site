@@ -1,0 +1,32 @@
+<%- include('../partials/header', { pageTitle: `${title} | My Blog` }) %>
+<section class="form-layout">
+    <a class="back-link" href="<%= typeof values._id !== 'undefined' ? `/articles/${values._id}` : '/' %>">← Back</a>
+    <div class="form-heading">
+        <span class="eyebrow">Make something worth reading</span>
+        <h1><%= title %></h1>
+        <p>Write it your way. You can always come back and edit later.</p>
+    </div>
+    <form class="panel-form" action="<%= formAction %>" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+        <div class="field">
+            <label for="title">Story title</label>
+            <input id="title" name="title" maxlength="120" required value="<%= values.title || '' %>" placeholder="A title that draws readers in">
+        </div>
+        <div class="field">
+            <label for="description">Short introduction</label>
+            <textarea id="description" name="description" rows="3" maxlength="500" required placeholder="Give readers a little preview"><%= values.description || '' %></textarea>
+            <span class="field-hint">Up to 500 characters</span>
+        </div>
+        <div class="field">
+            <label for="content">Your story</label>
+            <textarea id="content" class="editor" name="content" rows="14" maxlength="50000" required placeholder="Start writing here..."><%= values.content || '' %></textarea>
+            <span class="field-hint">Up to 50,000 characters</span>
+        </div>
+        <div class="form-actions">
+            <button class="button" type="submit"><%= values._id ? 'Save changes' : 'Publish story' %> <span aria-hidden="true">→</span></button>
+            <a class="button button-quiet" href="<%= typeof values._id !== 'undefined' ? `/articles/${values._id}` : '/' %>">Cancel</a>
+        </div>
+    </form>
+</section>
+<%- include('../partials/footer') %>

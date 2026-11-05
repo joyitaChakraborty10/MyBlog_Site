@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#183c35">
+    <title><%= pageTitle || 'My Blog' %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="nav-wrap">
+            <a class="brand" href="/" aria-label="My Blog home"><span class="brand-mark">M</span><span>my<span class="brand-accent">blog</span></span></a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="/">Discover</a>
+                <% if (currentUser) { %>
+                    <a href="/articles/new">Write</a>
+                    <a href="/users/<%= encodeURIComponent(currentUser.username) %>">My profile</a>
+                    <form class="nav-logout" action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="nav-link-button" type="submit">Sign out</button>
+                    </form>
+                <% } else { %>
+                    <a href="/login">Sign in</a>
+                    <a class="nav-join" href="/register">Join the blog</a>
+                <% } %>
+            </nav>
+        </div>
+    </header>
+    <main class="site-main">
+        <% if (notice) { %>
+            <div class="notice" role="status"><%= notice %></div>
+        <% } %>

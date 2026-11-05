@@ -1,0 +1,29 @@
+<%- include('../partials/header', { pageTitle: 'Sign in | My Blog' }) %>
+<section class="auth-layout">
+    <div class="auth-art">
+        <span class="eyebrow">Good to have you back</span>
+        <h1>Your next idea<br>is waiting.</h1>
+        <p>Sign in to keep writing, discover fresh perspectives, and connect with the people behind the stories.</p>
+        <span class="auth-art-mark" aria-hidden="true">“</span>
+    </div>
+    <div class="auth-panel">
+        <span class="eyebrow">Welcome back</span>
+        <h2>Sign in to My Blog</h2>
+        <p class="form-intro">Pick up right where you left off.</p>
+        <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+        <form class="panel-form" action="/login" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required value="<%= email %>" placeholder="you@example.com">
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+            </div>
+            <button class="button button-wide" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="auth-switch">New to My Blog? <a href="/register">Create an account</a></p>
+    </div>
+</section>
+<%- include('../partials/footer') %>

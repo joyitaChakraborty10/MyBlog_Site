@@ -1,0 +1,35 @@
+<%- include('../partials/header', { pageTitle: 'Join My Blog' }) %>
+<section class="auth-layout">
+    <div class="auth-art">
+        <span class="eyebrow">Your voice belongs here</span>
+        <h1>Make room<br>for <em>your story.</em></h1>
+        <p>Build your own little corner of the community. Share what moves you and discover what moves others.</p>
+        <span class="auth-art-mark" aria-hidden="true">✦</span>
+    </div>
+    <div class="auth-panel">
+        <span class="eyebrow">Start your journey</span>
+        <h2>Create your account</h2>
+        <p class="form-intro">It only takes a moment to get started.</p>
+        <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+        <form class="panel-form" action="/register" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" autocomplete="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" required value="<%= values.username || '' %>" placeholder="your_name">
+                <span class="field-hint">Letters, numbers, and underscores</span>
+            </div>
+            <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required value="<%= values.email || '' %>" placeholder="you@example.com">
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required>
+                <span class="field-hint">Use at least 10 characters</span>
+            </div>
+            <button class="button button-wide" type="submit">Create account <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="auth-switch">Already a member? <a href="/login">Sign in</a></p>
+    </div>
+</section>
+<%- include('../partials/footer') %>

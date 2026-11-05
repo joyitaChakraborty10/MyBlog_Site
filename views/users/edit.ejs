@@ -1,0 +1,27 @@
+<%- include('../partials/header', { pageTitle: 'Edit profile | My Blog' }) %>
+<section class="form-layout narrow-form">
+    <a class="back-link" href="/users/<%= encodeURIComponent(currentUser.username) %>">← Back to profile</a>
+    <div class="form-heading">
+        <span class="eyebrow">Tell your story</span>
+        <h1>Edit your profile</h1>
+        <p>Help readers get to know the person behind the posts.</p>
+    </div>
+    <form class="panel-form" action="/profile/edit" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+        <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" required value="<%= values.username %>">
+        </div>
+        <div class="field">
+            <label for="bio">About you</label>
+            <textarea id="bio" name="bio" rows="6" maxlength="500" placeholder="What do you love writing about?"><%= values.bio || '' %></textarea>
+            <span class="field-hint">Up to 500 characters</span>
+        </div>
+        <div class="form-actions">
+            <button class="button" type="submit">Save profile <span aria-hidden="true">→</span></button>
+            <a class="button button-quiet" href="/users/<%= encodeURIComponent(currentUser.username) %>">Cancel</a>
+        </div>
+    </form>
+</section>
+<%- include('../partials/footer') %>

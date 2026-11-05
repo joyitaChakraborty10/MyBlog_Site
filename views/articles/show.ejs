@@ -1,0 +1,27 @@
+<%- include('../partials/header', { pageTitle: `${article.title} | My Blog` }) %>
+<article class="reading-layout">
+    <a class="back-link" href="/">← All stories</a>
+    <div class="reading-header">
+        <span class="eyebrow">Community story</span>
+        <h1><%= article.title %></h1>
+        <p class="reading-description"><%= article.description %></p>
+        <div class="reading-meta">
+            <a class="author-link" href="/users/<%= encodeURIComponent(article.author.username) %>">
+                <span class="avatar"><%= article.author.username.charAt(0).toUpperCase() %></span>
+                <span><strong><%= article.author.username %></strong><small>Writer</small></span>
+            </a>
+            <time datetime="<%= article.createdAt.toISOString() %>"><%= article.createdAt.toLocaleDateString() %></time>
+        </div>
+    </div>
+    <div class="reading-content"><%= article.content %></div>
+    <% if (currentUser && currentUser._id.toString() === article.author._id.toString()) { %>
+        <div class="owner-actions">
+            <a class="button button-outline" href="/articles/<%= article._id %>/edit">Edit story</a>
+            <form action="/articles/<%= article._id %>/delete" method="POST" onsubmit="return confirm('Delete this story permanently?')">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="button button-danger" type="submit">Delete story</button>
+            </form>
+        </div>
+    <% } %>
+</article>
+<%- include('../partials/footer') %>

@@ -1,0 +1,57 @@
+<%- include('../partials/header', { pageTitle: `${profile.username}'s profile | My Blog` }) %>
+<section class="profile-banner">
+    <div class="avatar avatar-large"><%= profile.username.charAt(0).toUpperCase() %></div>
+    <div class="profile-intro">
+        <span class="eyebrow">Writer profile</span>
+        <h1><%= profile.username %></h1>
+        <p><%= profile.bio || 'This writer has not added a bio yet.' %></p>
+        <span class="profile-since">Writing with us since <%= profile.createdAt.toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) %></span>
+    </div>
+    <% if (currentUser && currentUser._id.toString() === profile._id.toString()) { %>
+        <a class="button button-outline profile-edit" href="/profile/edit">Edit profile</a>
+    <% } %>
+</section>
+
+<section class="feed-section profile-stories">
+    <div class="section-top">
+        <div><span class="eyebrow">From this writer</span><h2><%= articles.length %> <%= articles.length === 1 ? 'story' : 'stories' %></h2></div>
+        <% if (currentUser && currentUser._id.toString() === profile._id.toString()) { %>
+            <a class="button" href="/articles/new">Write a story <span aria-hidden="true">→</span></a>
+        <% } %>
+    </div>
+    <% if (articles.length) { %>
+        <div class="article-grid">
+            <% for (const article of articles) { %>
+                <article class="story-card">
+                    <a class="story-card-link" href="/articles/<%= article._id %>">
+                        <span class="story-category">COMMUNITY STORY</span>
+                        <h3><%= article.title %></h3>
+                        <p class="story-description"><%= article.description %></p>
+                    </a>
+                    <div class="story-meta">
+                        <time datetime="<%= article.createdAt.toISOString() %>"><%= article.createdAt.toLocaleDateString() %></time>
+                        <% if (currentUser && currentUser._id.toString() === profile._id.toString()) { %>
+                            <span class="inline-actions">
+                                <a href="/articles/<%= article._id %>/edit">Edit</a>
+                                <form action="/articles/<%= article._id %>/delete" method="POST" onsubmit="return confirm('Delete this story permanently?')">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </span>
+                        <% } %>
+                    </div>
+                </article>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <span class="empty-icon" aria-hidden="true">✦</span>
+            <h3>No stories published yet</h3>
+            <p>When this writer publishes, their stories will appear here.</p>
+            <% if (currentUser && currentUser._id.toString() === profile._id.toString()) { %>
+                <a class="button" href="/articles/new">Write your first story</a>
+            <% } %>
+        </div>
+    <% } %>
+</section>
+<%- include('../partials/footer') %>

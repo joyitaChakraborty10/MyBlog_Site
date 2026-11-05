@@ -1,0 +1,73 @@
+<%- include('../partials/header', { pageTitle: 'Discover stories | My Blog' }) %>
+<section class="welcome-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">A community of curious minds</span>
+        <h1>Ideas are better<br>when they're <em>shared.</em></h1>
+        <p>Discover thoughtful stories from independent writers, or find a quiet corner to publish your own.</p>
+        <% if (currentUser) { %>
+            <a class="button button-light" href="/articles/new">Start writing <span aria-hidden="true">→</span></a>
+        <% } else { %>
+            <a class="button button-light" href="/register">Create your free account <span aria-hidden="true">→</span></a>
+        <% } %>
+    </div>
+    <div class="hero-decoration" aria-hidden="true">
+        <span class="hero-sun"></span>
+        <span class="hero-leaf leaf-one"></span>
+        <span class="hero-leaf leaf-two"></span>
+        <span class="hero-leaf leaf-three"></span>
+        <span class="hero-book">YOUR NEXT<br>GOOD READ</span>
+    </div>
+</section>
+
+<section class="feed-section">
+    <div class="section-top">
+        <div>
+            <span class="eyebrow">Fresh from the community</span>
+            <h2>Latest stories</h2>
+        </div>
+        <form class="search-form" action="/" method="GET" role="search">
+            <label class="sr-only" for="story-search">Search stories</label>
+            <input id="story-search" name="q" type="search" value="<%= query %>" maxlength="80" placeholder="Search stories">
+            <button type="submit" aria-label="Search">⌕</button>
+        </form>
+    </div>
+
+    <% if (articles.length) { %>
+        <div class="article-grid" id="article-grid">
+            <% for (const article of articles) { %>
+                <article class="story-card">
+                    <a class="story-card-link" href="/articles/<%= article._id %>">
+                        <span class="story-category">COMMUNITY STORY</span>
+                        <h3><%= article.title %></h3>
+                        <p class="story-description"><%= article.description %></p>
+                    </a>
+                    <div class="story-meta">
+                        <a class="author-link" href="/users/<%= encodeURIComponent(article.author.username) %>">
+                            <span class="avatar avatar-small"><%= article.author.username.charAt(0).toUpperCase() %></span>
+                            <span><%= article.author.username %></span>
+                        </a>
+                        <time datetime="<%= article.createdAt.toISOString() %>"><%= article.createdAt.toLocaleDateString() %></time>
+                    </div>
+                </article>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <span class="empty-icon" aria-hidden="true">✦</span>
+            <h3><%= query ? 'No stories found' : 'The first page is still blank' %></h3>
+            <p><%= query ? 'Try another search, or explore all stories.' : 'Be the first to share a story with the community.' %></p>
+            <% if (query) { %>
+                <a class="button button-outline" href="/">Show all stories</a>
+            <% } else if (currentUser) { %>
+                <a class="button" href="/articles/new">Write the first story</a>
+            <% } else { %>
+                <a class="button" href="/register">Join and write</a>
+            <% } %>
+        </div>
+    <% } %>
+</section>
+<script>
+    const liveFeed = new EventSource('/events');
+    liveFeed.addEventListener('articles', () => window.location.reload());
+</script>
+<%- include('../partials/footer') %>
